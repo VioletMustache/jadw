@@ -19,16 +19,28 @@
 
 (def *discogs-api*
   "Discogs API URL."
-  "https://api.discogs.com/database/")
+  "https://api.discogs.com/")
 
-(defn fetch-album
+(defn find-album
   "Returns vector of albums."
   [artist album]
-  (json/read-str (:body (client/get (str *discogs-api* "search?title=" artist "-" album "&token=" *token*))) :key-fn keyword))
+  (json/read-str (:body (client/get (str *discogs-api*
+                                         "database/search?release_title=" album
+                                         "&artist=" artist
+                                         "&per_page=3?page=1"
+                                         "&token=" *token*))) :key-fn keyword))
 
-;; This function returns very first
-;; result from the search results.
-(defn get-album-id-from-json
-  "Extract album ID from album."
+(defn get-album-id
+  "Extract album ID from first album in vector of albums (json)."
   [albums]
   (:id (first (:results albums))))
+
+(defn get-release-information
+  "Returns given release data."
+  [releaseid]
+  (json/read-str (:body (client/get (str *discogs-api* "releases/" releaseid))) :key-fn keyword))
+
+(defn get-tracklist-from-release
+  "Returns list of tracks from release json data."
+  [release]
+  (:tracklist release))
