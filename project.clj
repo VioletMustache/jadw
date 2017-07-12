@@ -3,7 +3,8 @@
   :url "https://github.com/VioletMustache/jadw"
   :license {:name "MIT"}
   :dependencies [[org.clojure/clojure "1.8.0"]
-                 [clj-http "3.6.1"]]
+                 [clj-http "3.6.1"]
+                 [org.clojure/data.json "0.2.6"]]
   :main ^:skip-aot jadw.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})
