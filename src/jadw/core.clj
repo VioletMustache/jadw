@@ -44,3 +44,18 @@
   "Returns list of tracks from release json data."
   [release]
   (:tracklist release))
+
+(defn get-track-names
+  "Returns vector of track names."
+  [tracks]
+  (map get-track-name res))
+
+(defn get-track-name
+  "Returns track name."
+  [track]
+  (:title track))
+
+(defn song-named-after-albump
+  "Returns true if there is a song named as album."
+  [album tracks]
+  (some #(= album %) tracks))
