@@ -1,7 +1,8 @@
 (ns jadw.core
   (:gen-class)
   (:require [clj-http.client :as client]
-            [clojure.data.json :as json]))
+            [clojure.data.json :as json]
+            [clojure.string :as str]))
 
 (defn -main
   "I don't do a whole lot ... yet."
@@ -45,17 +46,28 @@
   [release]
   (:tracklist release))
 
-(defn get-track-names
-  "Returns vector of track names."
-  [tracks]
-  (map get-track-name res))
-
 (defn get-track-name
   "Returns track name."
   [track]
   (:title track))
 
+(defn get-track-names
+  "Returns vector of track names."
+  [tracks]
+  (map get-track-name tracks))
+
+;; TODO: this search should not be case sensitive
 (defn song-named-after-albump
   "Returns true if there is a song named as album."
   [album tracks]
   (some #(= album %) tracks))
+
+(defn check-if-album-has-song-with-the-same-namep
+  "Return true if album has a song with the same name."
+  [artist album]
+  (song-named-after-albump album
+                           (get-track-names
+                            (get-tracklist-from-release
+                             (get-release-information
+                              (get-album-id
+                               (find-album artist album)))))))
